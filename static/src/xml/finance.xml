@@ -1,0 +1,7 @@
+<templates xml:space="preserve">
+    <t t-name="ip_dashboard_finance.Scope" t-inherit="ip_dashboard.Workspace" t-inherit-mode="extension">
+        <xpath expr="//t[@t-set='metric']" position="after">
+            <p t-if="metric &amp;&amp; metric.scope" class="ip-caption" dir="auto" t-esc="label(metric, 'scope')"/>
+        </xpath>
+    </t>
+</templates>
