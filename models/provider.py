@@ -42,7 +42,7 @@ class FinanceProvider(models.AbstractModel):
                 'label': en, 'label_ar': ar, 'module': 'Finance', 'groups': GROUPS,
                 'model': 'account.move.line', 'company_field': 'company_id',
                 'kinds': ['kpi'] if key in ('gross_profit', 'net_profit', 'net_margin', 'equity_earnings') else
-                         ['table', 'bar'] if key in ('pnl', 'balance_sheet', 'aged_receivable', 'aged_payable') else ['kpi', 'bar', 'table'],
+                         ['table', 'bar', 'column', 'line', 'area', 'pie', 'doughnut'] if key in ('pnl', 'balance_sheet', 'aged_receivable', 'aged_payable') else ['kpi', 'bar', 'table', 'column', 'line', 'area', 'pie', 'doughnut'],
                 'filters': [GROUP_FILTER] if grouped else [],
             }
         return result
@@ -166,15 +166,15 @@ class FinanceProvider(models.AbstractModel):
                  description_ar='الأداء المرحل والأرصدة وأولويات التحصيل الحالية.', blocks=[
                      block('revenue'), block('net_profit'), block('net_margin'), block('cash'),
                      block('receivable'), block('payable'), block('overdue_receivable'), block('overdue_payable'),
-                     block('revenue', 'bar', 2, 'month'), block('expenses', 'bar', 2, 'account'),
+                     block('revenue', 'line', 2, 'month'), block('expenses', 'doughnut', 2, 'account'),
                      block('pnl', 'table', 2), block('balance_sheet', 'table', 2),
-                     block('aged_receivable', 'bar', 2), block('aged_payable', 'bar', 2),
+                     block('aged_receivable', 'column', 2), block('aged_payable', 'column', 2),
                      block('overdue_receivable', 'table', 2, 'partner'), block('overdue_payable', 'table', 2, 'partner')]),
             dict(key='finance.performance', name='Finance — Profit and loss', name_ar='المالية — الأرباح والخسائر',
                  description='Revenue, costs, margins and account breakdowns.', description_ar='الإيرادات والتكاليف والهوامش وتفاصيل الحسابات.', blocks=[
                      block('revenue'), block('cogs'), block('gross_profit'), block('expenses'),
                      block('net_profit'), block('net_margin'), block('cash_movement', 'kpi', 2),
-                     block('pnl', 'table', 4), block('revenue', 'bar', 2, 'month'), block('expenses', 'bar', 2, 'month'),
+                     block('pnl', 'table', 4), block('revenue', 'line', 2, 'month'), block('expenses', 'bar', 2, 'month'),
                      block('revenue', 'table', 2, 'account'), block('expenses', 'table', 2, 'account')]),
             dict(key='finance.collections', name='Finance — Receivables and payables', name_ar='المالية — الحسابات المدينة والدائنة',
                  description='Current open balances and aging, net of credits; independent of the period filter.',
