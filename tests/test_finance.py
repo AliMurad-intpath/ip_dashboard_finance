@@ -13,9 +13,9 @@ class TestFinanceDashboard(TransactionCase):
         cls.company = cls.env['res.company'].create({'name': 'IP Finance Test Company'})
         cls.provider = cls.env['ip.dashboard.provider'].with_company(cls.company)
         accounts = cls.env['account.account'].with_company(cls.company).create([
-            {'name': 'IP test cash', 'code': 'IP100', 'account_type': 'asset_cash', 'company_ids': [Command.set(cls.company.ids)]},
-            {'name': 'IP test revenue', 'code': 'IP400', 'account_type': 'income', 'company_ids': [Command.set(cls.company.ids)]},
-            {'name': 'IP test expense', 'code': 'IP600', 'account_type': 'expense', 'company_ids': [Command.set(cls.company.ids)]},
+            {'name': 'IP test cash', 'code': 'IP100', 'account_type': 'asset_cash', 'company_id': cls.company.id},
+            {'name': 'IP test revenue', 'code': 'IP400', 'account_type': 'income', 'company_id': cls.company.id},
+            {'name': 'IP test expense', 'code': 'IP600', 'account_type': 'expense', 'company_id': cls.company.id},
         ])
         cls.cash, cls.revenue, cls.expense = accounts
         cls.journal = cls.env['account.journal'].with_company(cls.company).create({
@@ -53,7 +53,7 @@ class TestFinanceDashboard(TransactionCase):
     def test_non_accounting_user_is_denied(self):
         user=self.env['res.users'].create({'name':'IP non-accountant', 'login':'ip_finance_nonaccountant',
             'company_id':self.company.id, 'company_ids':[Command.set(self.company.ids)],
-            'group_ids':[Command.set(self.env.ref('base.group_user').ids)]})
+            'groups_id':[Command.set(self.env.ref('base.group_user').ids)]})
         with self.assertRaises(AccessError):
             self.provider.with_user(user)._run_source('finance.revenue',{'kind':'kpi','filters':{}},{'period':'all'},self.company)
 

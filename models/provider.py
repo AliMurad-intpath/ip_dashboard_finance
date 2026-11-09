@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import AccessError, ValidationError
+from odoo.addons.ip_dashboard.models.compat import check_access
 from .finance_math import INCOME, EXPENSE, ASSET, LIABILITY, EQUITY, totals, age_bucket
 
 # Every query is company-scoped, posted only and performed with the viewer's rights.
@@ -66,7 +67,7 @@ class FinanceProvider(models.AbstractModel):
         en, ar, mode, types, sign = METRICS[key]
         domain += [('parent_state', '=', 'posted')]
         model = self.env['account.move.line'].with_company(company).with_context(allowed_company_ids=[company.id])
-        model.check_access('read')
+        check_access(model, 'read')
         if mode == 'current':
             domain += [('date', '<=', today), ('amount_residual', '!=', 0)]
         else:
